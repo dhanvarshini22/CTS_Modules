@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Event Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== Global Styles ===== */
+    :root {
+      --primary: #4a6fa5;
+      --secondary: #ff7e5f;
+      --accent: #6b8e23;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --text: #333;
+      --text-light: #6c757d;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: var(--light);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* ===== Header & Navigation ===== */
+    header {
+      background: linear-gradient(135deg, var(--primary), #3a5a8a);
+      color: var(--white);
+      padding: 1rem 0;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-left: 1.5rem;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ===== Main Content ===== */
+    #welcomeBanner {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover;
+      color: var(--white);
+      padding: 4rem 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    /* ===== Events Section ===== */
+    .filter-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .filter-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .events-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .event-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .event-card .meta {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .event-card .seats {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      margin-top: 1rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: #3a5a8a;
+      transform: translateY(-2px);
+    }
+
+    /* ===== Registration Form ===== */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-container input,
+    .form-container select {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .error {
+      color: #dc3545;
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    #registrationResult {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .error-message {
+      background-color: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+
+    /* ===== Loading Spinner ===== */
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin: 2rem auto;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: linear-gradient(135deg, var(--dark), #1a252f);
+      color: var(--white);
+      padding: 2rem 0;
+      text-align: center;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <h1 style="color:white">Community Events</h1>
+      <ul class="nav-links">
+        <li><a href="#events"><i class="fas fa-calendar-alt"></i> Events</a></li>
+        <li><a href="#register"><i class="fas fa-user-plus"></i> Register</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Welcome Banner -->
+  <div id="welcomeBanner">
+    <h1 >Welcome to Our Community Portal!</h1>
+    <p>Join us for exciting local events and activities</p>
+  </div>
+
+  <div class="container">
+    <!-- Events Section -->
+    <section id="events">
+      <h2>Upcoming Events</h2>
+      
+      <div class="filter-controls">
+        <div class="form-group">
+          <label for="categoryFilter">Filter by Category:</label>
+          <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="music">Music</option>
+            <option value="art">Art</option>
+            <option value="food">Food</option>
+            <option value="sports">Sports</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="searchInput">Search Events:</label>
+          <input type="text" id="searchInput" placeholder="Search events...">
+        </div>
+      </div>
+      
+      <div class="spinner" id="loadingSpinner"></div>
+      <div class="events-container" id="eventsContainer">
+        <!-- Events will be loaded here by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Registration Form -->
+    <section id="register">
+      <h2>Event Registration</h2>
+      
+      <div class="form-container">
+        <form id="registrationForm">
+          <div class="form-group">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+            <span class="error" id="nameError"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <span class="error" id="emailError"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="eventSelect">Select Event:</label>
+            <select id="eventSelect" name="event" required>
+              <option value="">-- Select an Event --</option>
+              <!-- Events will be populated by JavaScript -->
+            </select>
+          </div>
+          
+          <button type="submit" class="btn">Register</button>
+        </form>
+        
+        <div id="registrationResult"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2023 Community Event Portal. All rights reserved.</p>
+  </footer>
+
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const events = [
+      {
+        id: 1,
+        title: 'Summer Music Festival',
+        category: 'music',
+        date: '2025-07-15',
+        location: 'Central Park',
+        seats: 120
+      },
+      {
+        id: 2,
+        title: 'Art in the Park',
+        category: 'art',
+        date: '2025-08-01',
+        location: 'Art District',
+        seats: 80
+      },
+      {
+        id: 3,
+        title: 'Food Truck Fiesta',
+        category: 'food',
+        date: '2025-07-20',
+        location: 'Downtown Square',
+        seats: 100
+      },
+      {
+        id: 4,
+        title: 'City Marathon',
+        category: 'sports',
+        date: '2025-09-10',
+        location: 'City Stadium',
+        seats: 300
+      },
+      {
+        id: 5,
+        title: 'Jazz Night',
+        category: 'music',
+        date: '2025-07-30',
+        location: 'Riverfront',
+        seats: 50
+      }
+    ];
+
+    const eventsContainer = document.getElementById('eventsContainer');
+    const eventSelect = document.getElementById('eventSelect');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const searchInput = document.getElementById('searchInput');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const form = document.getElementById('registrationForm');
+    const resultDiv = document.getElementById('registrationResult');
+
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+
+    function showLoading(show) {
+      loadingSpinner.style.display = show ? 'block' : 'none';
+    }
+
+    function renderEvents(filteredEvents) {
+      eventsContainer.innerHTML = '';
+      filteredEvents.forEach(event => {
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.innerHTML = `
+          <h3>${event.title}</h3>
+          <div class="meta">
+            <span><i class="fas fa-calendar-alt"></i> ${event.date}</span>
+            <span><i class="fas fa-map-marker-alt"></i> ${event.location}</span>
+          </div>
+          <p class="seats">Available Seats: ${event.seats}</p>
+        `;
+        eventsContainer.appendChild(card);
+      });
+    }
+
+    function populateEventOptions() {
+      events.forEach(event => {
+        const option = document.createElement('option');
+        option.value = event.title;
+        option.textContent = event.title;
+        eventSelect.appendChild(option);
+      });
+    }
+
+    function filterEvents() {
+      const selectedCategory = categoryFilter.value;
+      const searchTerm = searchInput.value.toLowerCase();
+
+      const filtered = events.filter(event => {
+        const matchesCategory = selectedCategory === 'all' || event.category === selectedCategory;
+        const matchesSearch = event.title.toLowerCase().includes(searchTerm);
+        return matchesCategory && matchesSearch;
+      });
+
+      renderEvents(filtered);
+    }
+
+    function validateForm() {
+      let isValid = true;
+      nameError.textContent = '';
+      emailError.textContent = '';
+
+      if (!nameInput.value.trim()) {
+        nameError.textContent = 'Name is required.';
+        isValid = false;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value.trim()) {
+        emailError.textContent = 'Email is required.';
+        isValid = false;
+      } else if (!emailRegex.test(emailInput.value.trim())) {
+        emailError.textContent = 'Enter a valid email address.';
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      if (!validateForm()) return;
+
+      const selectedEvent = eventSelect.value;
+
+      if (!selectedEvent) {
+        resultDiv.className = 'error-message';
+        resultDiv.textContent = 'Please select an event.';
+        resultDiv.style.display = 'block';
+        return;
+      }
+
+      resultDiv.className = 'success';
+      resultDiv.textContent = `Successfully registered for "${selectedEvent}"!`;
+      resultDiv.style.display = 'block';
+
+      form.reset();
+    }
+
+    // Initial Load
+    showLoading(true);
+    setTimeout(() => {
+      renderEvents(events);
+      populateEventOptions();
+      showLoading(false);
+    }, 800); // Simulate loading
+
+    // Event Listeners
+    categoryFilter.addEventListener('change', filterEvents);
+    searchInput.addEventListener('input', filterEvents);
+    form.addEventListener('submit', handleFormSubmit);
+  });
+</script>
+
+</body>
+</html>
